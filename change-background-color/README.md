@@ -2,6 +2,6 @@
 
 Changing the background color of the screen, by selecting the color options from the menu below. 
 
-Topics - React Basics, Tailwind CSS
+Concepts - React Basics, Tailwind CSS
 
 
