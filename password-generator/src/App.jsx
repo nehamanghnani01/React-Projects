@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import './App.css'
 
 function App() {
@@ -21,7 +21,7 @@ function App() {
         
       for(let i=1; i<=length; i++) {
         let char = Math.floor((Math.random() * str.length + 1))
-        pass = str.charAt(char)
+        pass += str.charAt(char)
       }
       
       setPassword(pass)
@@ -29,10 +29,22 @@ function App() {
   } , 
   [length, numberAllowed, charAllowed, setPassword])
 
+  useEffect(() => {
+    passwordGenerator()
+  }, [length, numberAllowed, charAllowed, passwordGenerator])
+
+  const passwordRef = useRef(null)
+
+  const copyPasswordToClipboard = useCallback(() => {
+    passwordRef.current?.select()
+    // passwordRef.current?.setSelectionRange(0,3)
+    window.navigator.clipboard.writeText(password)
+  }, [password])
+
   return (
     <div className="flex items-center justify-center h-screen w-screen bg-gray-800">
       <div className="w-full max-w-md mx-auto shadow-md rounded-lg px-6 py-6 text-orange-500 bg-gray-700">
-        <h1 className="text-white text-center text-2xl font-semibold mb-4">
+        <h1 className="text-white text-center text-lg font-semibold mb-4">
           Password Generator
         </h1>
         <div className="flex items-center space-x-2 shadow rounded-lg overflow-hidden bg-gray-600">
@@ -41,17 +53,18 @@ function App() {
             className="outline-none w-full py-2 px-3 text-center text-lg bg-gray-600 text-white"
             value={password || ""}
             placeholder="Generated Password"
+            ref={passwordRef}
             readOnly
           />
           <button
-            
+            onClick={copyPasswordToClipboard}
             className="outline-none bg-blue-700 text-white px-3 py-1 shrink-0 hover:bg-blue-800 transition"
           >
             Copy
           </button>
         </div>
 
-        <div className='flex test-sm gap-x-2'>
+        <div className='flex test-sm gap-x-2 mt-4'>
           <div className='flex items-center gap-x-1'>
             <input 
             type='range' 
